@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ShooterConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   // drn --
@@ -27,11 +28,17 @@ public class DriveSubsystem extends SubsystemBase {
     new CANSparkMax(DriveConstants.kRightMotor02CanBusID, MotorType.kBrushless);
   private final CANSparkMax m_threeWheel = 
     new CANSparkMax(DriveConstants.kRightMotor03CanBusID, MotorType.kBrushless);
+  //shooter motor
+  private final CANSparkMax m_fourShooter =
+    new CANSparkMax(ShooterConstants.kShooterMotorPWM, MotorType.kBrushless);
   
   private final MotorControllerGroup m_leftMotors =
     new MotorControllerGroup(m_zeroWheel, m_oneWheel);
   private final MotorControllerGroup m_rightMotors =
     new MotorControllerGroup(m_twoWheel, m_threeWheel);
+//shooter motor
+  private final MotorControllerGroup m_shooterMotors =
+    new MotorControllerGroup(m_fourShooter);
   
   private final DifferentialDrive m_drive =
     new DifferentialDrive(m_leftMotors, m_rightMotors);

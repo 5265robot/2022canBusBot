@@ -18,7 +18,7 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterSubsystem extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private final Spark m_intakeSpark = new Spark(ShooterConstants.kIntakeMotorPWM);
+  private final Spark m_intakeSpark = new Spark(ShooterConstants.kShooterMotorPWM);
   private final Spark m_lowerSpark = new Spark(ShooterConstants.kLowerMotorPWM);
   private final Spark m_upperSpark = new Spark(ShooterConstants.kUpperMotorPWM);
 

@@ -11,19 +11,26 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -37,6 +44,8 @@ public class RobotContainer {
 
   // drn -- drive & intake & arm subsystem declarations
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+
+  private final ShooterSubsystem m_shooterMotor = new ShooterSubsystem();
   /*
    * removed for CAN issue private final IntakeSubsystem m_intake = new
    * IntakeSubsystem();
@@ -45,8 +54,7 @@ public class RobotContainer {
    */
   // drn --- declaring an instance of the XBox controller
   private final XboxController m_xboxController = new XboxController(OIConstants.kDriverControllerPort);
-  // drn -- thrustmaster is the name of our Joystick that we used when the xBox controller didn't have enough buttons
-  // private final Joystick m_thrustMaster = new Joystick(OIConstants.kTrustMasterPort);
+  //private final Joystick m_thrustMaster = new Joystick(OIConstants.kTrustMasterPort);
 
   // drn -- A chooser for autonomous commands
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -60,16 +68,16 @@ public class RobotContainer {
   private VideoSink videoServer;
 
   // drn -- while driving diagnostics
-  public final PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
-
+  public final PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
   // drn -- simple autonomous driving
   // use ()-> to specify the start and end commands
   private final Command m_simpleDriveForward = new RunCommand(() -> m_robotDrive.arcadeDrive(AutoConstants.kPower, 0.0),
       m_robotDrive).withTimeout(AutoConstants.kTimeOut);
 
-  private final Command m_simpleDriveReverse = new StartEndCommand(
-      () -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
+  private final Command m_simpleDriveReverse = new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
       m_robotDrive).withTimeout(AutoConstants.kTimeOut);
+
+  private final Command m_simpleShoot = new RunCommand(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, true));
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -79,17 +87,19 @@ public class RobotContainer {
     configureButtonBindings();
     // prepare the camera
     // removed for characterization
-    cameraInit();
+    // cameraInit();
 
     // drive command to split-stick arcade drive
     // split stick is left and right sticks on the XBox
+    
     m_robotDrive
-        .setDefaultCommand(new RunCommand(() -> m_robotDrive.arcadeDrive(m_xboxController.getLeftY(),
-            m_xboxController.getRightX()), m_robotDrive));
+        .setDefaultCommand(new RunCommand(() -> m_robotDrive.arcadeDrive(-m_xboxController.getLeftX(),
+            -m_xboxController.getRightY()), m_robotDrive));
 
     // drn -- sets up the driver's station to have options for autonomous
     m_chooser.addOption("Forward Auto", m_simpleDriveForward);
     m_chooser.addOption("Reverse Auto", m_simpleDriveReverse);
+    m_chooser.addOption("Shoot Auto", m_simpleShoot);
     m_chooser.setDefaultOption("Forward Auto", m_simpleDriveForward);
     sbConfig.add(m_chooser).withSize(3, 1).withPosition(0, 0);
 
@@ -200,8 +210,6 @@ public class RobotContainer {
     videoServer.setSource(camera01);
   } // end cameraInit
 
-  /*
-  // drn - this codes allows us to switch from one camera to the other with a button press
   // toggle switch for changing cameras
   private void cameraSwitch() {
     if (Constants.cameraState) {
@@ -211,7 +219,7 @@ public class RobotContainer {
     }
     Constants.cameraState = !Constants.cameraState;
   } // end cameraSwitch
-  */
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
