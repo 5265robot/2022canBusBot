@@ -10,19 +10,19 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ShooterConstants;
 
 /**
  * Add your docs here.
  */
-public class IntakeSubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private final Spark m_intakeSpark = new Spark(IntakeConstants.kIntakeMotorPWM);
-  private final Spark m_lowerSpark = new Spark(IntakeConstants.kLowerMotorPWM);
-  private final Spark m_upperSpark = new Spark(IntakeConstants.kUpperMotorPWM);
+  private final Spark m_intakeSpark = new Spark(ShooterConstants.kIntakeMotorPWM);
+  private final Spark m_lowerSpark = new Spark(ShooterConstants.kLowerMotorPWM);
+  private final Spark m_upperSpark = new Spark(ShooterConstants.kUpperMotorPWM);
 
-  public IntakeSubsystem() {
+  public ShooterSubsystem() {
     // initialization methods here
   }
 
@@ -46,7 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
   // giving the upper belt a bit more power
   public void upperAndLowerOn(double power){
     // can we put a timeout here
-    upperOn(power*IntakeConstants.kUpperLowerRatio);
+    upperOn(power*ShooterConstants.kUpperLowerRatio);
     lowerOn(power);
   }
   // turns off the conveyor belts
