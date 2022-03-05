@@ -20,7 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
   // here. Call these from Commands.
   private final Spark m_intakeSpark = new Spark(ShooterConstants.kShooterMotorPWM);
   private final Spark m_lowerSpark = new Spark(ShooterConstants.kLowerMotorPWM);
-  private final Spark m_upperSpark = new Spark(ShooterConstants.kUpperMotorPWM);
+  //private final Spark m_upperSpark = new Spark(ShooterConstants.kUpperMotorPWM);
 
   public ShooterSubsystem() {
     // initialization methods here
@@ -35,13 +35,14 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   // powers the upper conveyor belt
-  public void upperOn(double power){
-    m_upperSpark.set(power);
+  public void intakeBall(double power){
+    m_intakeSpark.set(power);
   }
   // powers the lower conveyor belt
   public void lowerOn(double power){
     m_lowerSpark.set(power);
   }
+  /*
   // powers both conveyor belts,
   // giving the upper belt a bit more power
   public void upperAndLowerOn(double power){
@@ -54,7 +55,7 @@ public class ShooterSubsystem extends SubsystemBase {
     upperOn(0.0);
     lowerOn(0.0);
   }
-
+  */
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

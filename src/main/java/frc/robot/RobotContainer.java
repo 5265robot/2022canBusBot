@@ -45,7 +45,7 @@ public class RobotContainer {
   // drn -- drive & intake & arm subsystem declarations
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
-  private final ShooterSubsystem m_shooterMotor = new ShooterSubsystem();
+  private final ShooterSubsystem m_intake = new ShooterSubsystem();
   /*
    * removed for CAN issue private final IntakeSubsystem m_intake = new
    * IntakeSubsystem();
@@ -77,7 +77,7 @@ public class RobotContainer {
   private final Command m_simpleDriveReverse = new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
       m_robotDrive).withTimeout(AutoConstants.kTimeOut);
 
-  private final Command m_simpleShoot = new RunCommand(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, true));
+  private final Command m_simpleShoot = new RunCommand(() -> m_intake.intakeBall(ShooterConstants.kIntakePower));
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
