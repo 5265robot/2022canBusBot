@@ -11,26 +11,24 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -46,6 +44,9 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   private final ShooterSubsystem m_shooterMotor = new ShooterSubsystem();
+
+
+
   /*
    * removed for CAN issue private final IntakeSubsystem m_intake = new
    * IntakeSubsystem();
@@ -78,7 +79,25 @@ public class RobotContainer {
       m_robotDrive).withTimeout(AutoConstants.kTimeOut);
 
   private final Command m_simpleShoot = new RunCommand(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, true));
+  
+  private final Command m_autoReverse = new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
+  m_robotDrive).withTimeout(AutoConstants.kTimeOut);
 
+  private final SequentialCommandGroup m_autoDunk = new SequentialCommandGroup(
+   new RunCommand(() -> m_robotDrive.arcadeDrive(AutoConstants.kPower, 0.0)),
+   new WaitCommand(2.0),
+   new RunCommand(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, true)),
+   new WaitCommand(2.0),
+   new RunCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0))
+  );
+
+
+/*
+   m_simpleShoot(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, true), m_shooterMotor), 
+   m_robotDrive.arcadeDrive(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
+   m_robotDrive).withTimeout(AutoConstants.kTimeOut)
+    .withTimeout(AutoConstants.kTimeOut));*/
+ 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -100,6 +119,7 @@ public class RobotContainer {
     m_chooser.addOption("Forward Auto", m_simpleDriveForward);
     m_chooser.addOption("Reverse Auto", m_simpleDriveReverse);
     m_chooser.addOption("Shoot Auto", m_simpleShoot);
+    m_chooser.addOption("Auto Dunks", m_autoDunk);
     m_chooser.setDefaultOption("Forward Auto", m_simpleDriveForward);
     sbConfig.add(m_chooser).withSize(3, 1).withPosition(0, 0);
 

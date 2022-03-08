@@ -76,9 +76,9 @@ public final class Constants {
 		public static final double kMaxSpeed = 0.9;
     }
     public final class ShooterConstants{
-        public static final int kLowerMotorPWM = 2;
-        public static final int kUpperMotorPWM = 1;
-        public static final int kShooterMotorPWM = 4;
+        public static final int kArmMotorPWM = 2;
+        public static final int kUpperMotorPWM = 4;
+        public static final int kShooterMotorPWM = 1;
         public static final double kIntakePower = 0.4; // 0.3
         public static final double kConveyorPulsePower = -0.4;
 		public static final double kConveyorFullPower = -0.6; //-0.6
