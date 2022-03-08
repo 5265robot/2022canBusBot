@@ -78,17 +78,16 @@ public class RobotContainer {
   private final Command m_simpleDriveReverse = new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
       m_robotDrive).withTimeout(AutoConstants.kTimeOut);
 
-  private final Command m_simpleShoot = new RunCommand(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, true));
+  private final Command m_simpleShoot = new RunCommand(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, false)); //needs to be false
   
   private final Command m_autoReverse = new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
   m_robotDrive).withTimeout(AutoConstants.kTimeOut);
 
   private final SequentialCommandGroup m_autoDunk = new SequentialCommandGroup(
-   new RunCommand(() -> m_robotDrive.arcadeDrive(AutoConstants.kPower, 0.0)),
-   new WaitCommand(2.0),
-   new RunCommand(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, true)),
-   new WaitCommand(2.0),
-   new RunCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0))
+   new RunCommand(() -> m_shooterMotor.intakeOn(0.3, false)).withTimeout(2.0),
+   new RunCommand(() -> m_shooterMotor.intakeOn(0.0, false)),
+  //motors dont turn
+   new RunCommand(() -> m_robotDrive.arcadeDrive(AutoConstants.kTimeOut, 0.0)).withTimeout(5.0)
   );
 
 

@@ -73,7 +73,7 @@ public final class Constants {
         public static final int kRightMotor02CanBusID = 12;
         public static final int kRightMotor03CanBusID = 13;
         public static final double kSlowMaxSpeed = 0.5;
-		public static final double kMaxSpeed = 0.9;
+		public static final double kMaxSpeed = 0.6;
     }
     public final class ShooterConstants{
         public static final int kArmMotorPWM = 2;
@@ -92,25 +92,5 @@ public final class Constants {
         public static final double kLowerPower = -0.6; // -0.4 upped for arm passage
 		*/
     }
-    public static final class ArmConstants{
-        public static final PneumaticsModuleType kPneumatic = PneumaticsModuleType.CTREPCM;
-        public static final int kArmMotorPWM = 0;
-        public static final int kWinchPWM = 3;
-        public static final double kArmPower = 0.3;
-        // postive, rachet CW; negative, rachet CCW
-		public static final double kWinchPower = -1.0;//-0.5
-		public static final int kchannelA = 0;
-        public static final int kchannelB = 1;
-        public static final double kSetPoint = -315.0;
-        public static final double kSetTolerance = 0.10;
-		public static final double kEncoderP = 0.0016;
-		public static final double kEncoderI = 0.0;
-        public static final double kEncoderD = 0.0;
-        public static final double countsPerRevolution = 7.0;
-        public static final double reduction = 71.1;
-		public static final int kPinchSolenoidPortA = 2;
-		public static final int kPinchSolenoidPortB = 3;
-		public static final int kArmSolenoidPortA = 0;
-		public static final int kArmSolenoidPortB = 1;
-    }
+
 }
