@@ -88,15 +88,15 @@ public final class Constants {
 		public static final double kPower = -0.8;
     }
     public final class DriveConstants{
-        public static final int kLeftMotor00CanBusID = 10;
         public static final int kLeftMotor01CanBusID = 11;
-        public static final int kRightMotor02CanBusID = 12;
+        public static final int kLeftMotor02CanBusID = 12;
         public static final int kRightMotor03CanBusID = 13;
+        public static final int kRightMotor04CanBusID = 14;
         public static final double kSlowMaxSpeed = 0.5;
 		public static final double kMaxSpeed = 0.6;
     }
     public final class ShooterConstants{
-        public static final int kArmMotor = 5;
+        public static final int kArmMotor05CanBusID = 15;
         public static final int kUpperMotorPWM = 4;
         public static final int kShooterMotorPWM = 1;
         public static final double kArmPower = 0.5; 

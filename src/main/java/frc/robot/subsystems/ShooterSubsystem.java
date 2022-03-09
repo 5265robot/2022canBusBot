@@ -22,7 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private final Spark m_intakeSpark = new Spark(ShooterConstants.kShooterMotorPWM);
-  private final CANVenom m_arm = new CANVenom(ShooterConstants.kArmMotor);
+  private final CANVenom m_arm = new CANVenom(ShooterConstants.kArmMotor05CanBusID);
   private final Spark m_upperSpark = new Spark(ShooterConstants.kUpperMotorPWM);
 
   public ShooterSubsystem() {

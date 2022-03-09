@@ -18,13 +18,13 @@ public class DriveSubsystem extends SubsystemBase {
   // drn --
   // motors, motor groups, and drive
   private final CANSparkMax m_zeroWheel = 
-    new CANSparkMax(DriveConstants.kLeftMotor00CanBusID, MotorType.kBrushless);
-  private final CANSparkMax m_oneWheel = 
     new CANSparkMax(DriveConstants.kLeftMotor01CanBusID, MotorType.kBrushless);
+  private final CANSparkMax m_oneWheel = 
+    new CANSparkMax(DriveConstants.kLeftMotor02CanBusID, MotorType.kBrushless);
   private final CANSparkMax m_twoWheel = 
-    new CANSparkMax(DriveConstants.kRightMotor02CanBusID, MotorType.kBrushless);
-  private final CANSparkMax m_threeWheel = 
     new CANSparkMax(DriveConstants.kRightMotor03CanBusID, MotorType.kBrushless);
+  private final CANSparkMax m_threeWheel = 
+    new CANSparkMax(DriveConstants.kRightMotor04CanBusID, MotorType.kBrushless);
   
   private final MotorControllerGroup m_leftMotors =
     new MotorControllerGroup(m_zeroWheel, m_oneWheel);

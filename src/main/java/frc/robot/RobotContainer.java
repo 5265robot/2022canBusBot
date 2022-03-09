@@ -31,7 +31,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -46,8 +45,6 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
-
-
 
   /*
    * removed for CAN issue private final IntakeSubsystem m_intake = new
@@ -86,8 +83,14 @@ public class RobotContainer {
   //motors dont turn
    new RunCommand (() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), m_robotDrive).withTimeout(4.0)
   );
-
-
+/*
+  private Command AutoDunk(DriveSubsystem drive, ShooterSubsystem intake) {
+    addCommands(
+        new RunCommand(() -> m_shooter.intakeOn(-ShooterConstants.kIntakePower, false), m_shooter),
+        new RunCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), m_robotDrive)
+    );
+}
+*/
 /*
    m_simpleShoot(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, true), m_shooterMotor), 
    m_robotDrive.arcadeDrive(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
