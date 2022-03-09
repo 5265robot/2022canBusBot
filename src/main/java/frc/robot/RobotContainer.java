@@ -141,7 +141,7 @@ public class RobotContainer {
 
     // intake/outake
     final JoystickButton intakeOn = new JoystickButton(m_xboxController, Constants.kIntakeButton);
-    intakeOn.whenPressed(() -> m_shooter.intakePulse(ShooterConstants.kIntakePower)); //need to test on/off and length of on time
+    intakeOn.whenPressed(() -> m_shooter.intakeOn(ShooterConstants.kIntakePower, Constants.currentIntakeState)); //need to test on/off and length of on time
     final  JoystickButton intakeReverse = new JoystickButton(m_xboxController, Constants.kIntakeReverseButton);
     intakeReverse.whenPressed(() -> m_shooter.intakeOn(-ShooterConstants.kIntakePower, Constants.currentIntakeState));
 
