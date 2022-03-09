@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.playingwithfusion.CANVenom;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
@@ -36,12 +37,17 @@ public class ShooterSubsystem extends SubsystemBase {
     Constants.currentIntakeState = !state;
   }
 
+  //intake on for certain amount of time
+  public void intakePulse(double power){
+    new RunCommand (() -> m_intakeSpark.set(power)).withTimeout(2.0);
+  }
+
   // powers the upper conveyor belt
   public void upperOn(double power){
     m_upperSpark.set(power);
   }
   // raises lift
-  public void armUp(double power){
+  public void armUp(double power, boolean state){ //may delete state
     m_arm.set(power);
   }
 

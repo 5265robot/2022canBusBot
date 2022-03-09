@@ -135,20 +135,18 @@ public class RobotContainer {
 
     // arm
     final JoystickButton armUp = new JoystickButton(m_xboxController, Constants.kArmUp);
-    armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower));
+    armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower, Constants.armExtended));
+    final JoystickButton armDown = new JoystickButton(m_xboxController, Constants.kArmDown);
+    armDown.whenPressed(() -> m_shooter.armUp(-ShooterConstants.kArmPower, Constants.armExtended));
 
-    //intake/outake
+    // intake/outake
     final JoystickButton intakeOn = new JoystickButton(m_xboxController, Constants.kIntakeButton);
-    intakeOn.whenPressed(() -> m_shooter.intakeOn(ShooterConstants.kIntakePower, Constants.currentIntakeState)); //need to test on/off and length of on time
+    intakeOn.whenPressed(() -> m_shooter.intakePulse(ShooterConstants.kIntakePower)); //need to test on/off and length of on time
     final  JoystickButton intakeReverse = new JoystickButton(m_xboxController, Constants.kIntakeReverseButton);
     intakeReverse.whenPressed(() -> m_shooter.intakeOn(-ShooterConstants.kIntakePower, Constants.currentIntakeState));
 
 
 /*
-    final JoystickButton slowDown = new JoystickButton(m_xboxController, Constants.kSlowDown);
-    slowDown.whenPressed(() -> m_robotDrive.halfPower());
-   */ 
-
     /* conveyor
     final JoystickButton conveyorButton = new JoystickButton(m_xboxController, Constants.kConveyorPulseButton);
     conveyorButton.whileHeld(new RunCommand(() -> m_intake.upperAndLowerOn(IntakeConstants.kConveyorPulsePower))

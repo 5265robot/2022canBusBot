@@ -29,24 +29,25 @@ public final class Constants {
 	public static boolean powerState = false;
 	
     // XBox mappings
-    /*  kBumperLeft(5)  --> 
+    /*  kBumperLeft(5)  --> arm down
         kBumperRight(6) --> arm up
         kStickLeft(9)   --> conveyor empty
         kStickRight(10) --> 
-        kA(1)           --> intake
-        kB(2)           --> 
+        kA(1)           --> intake on
+        kB(2)           --> intake reverse
         kX(3)           --> disable climbarm
         kY(4)           --> switch camera
-        kBack(7)        --> intake reverse
+        kBack(7)        --> 
         kStart(8)       --> half speed drive
     */
     public static int kIntakeButton = XboxController.Button.kA.value;   
-    public static int kConveyorPulseButton = XboxController.Button.kB.value;   
+    public static int kIntakeReverseButton = XboxController.Button.kB.value;   
     public static int kClimbOffButton = XboxController.Button.kX.value;
     public static int kSwitchCameraButton = XboxController.Button.kY.value;   
     public static int kSlowDown = XboxController.Button.kStart.value;
     public static int kArmUp = XboxController.Button.kRightBumper.value;
-	public static int kIntakeReverseButton = XboxController.Button.kBack.value;
+    public static int kArmDown = XboxController.Button.kLeftBumper.value;
+	public static int kConveyerPulseButton = XboxController.Button.kBack.value;
     public static int kConveyorEmptyButton = XboxController.Button.kLeftStick.value;
     
     // thrustmaster buttons
@@ -86,7 +87,7 @@ public final class Constants {
 		public static final double kConveyorFiveBallEmpty = 2.0;
         public static final double kConveyorOneBallPulse = 0.13;
 		public static final double kUpperLowerRatio = 1.5; // original 1.0, changed to put top spin on ball
-        public static final double kLowerTime = 0.15; //0.13
+        public static final double kIntakeTime = 2.0;
         public static final double kUpperTime = 0.15;
         /*
         public static final double kUpperPower = -0.6;
