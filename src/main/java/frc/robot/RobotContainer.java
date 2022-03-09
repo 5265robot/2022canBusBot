@@ -132,15 +132,16 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
     // arm
     final JoystickButton armUp = new JoystickButton(m_xboxController, Constants.kArmUp);
     armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower));
 
     //intake/outake
     final JoystickButton intakeOn = new JoystickButton(m_xboxController, Constants.kIntakeButton);
-    intakeOn.whenPressed(() -> m_shooter.intakeOn(ShooterConstants.kIntakePower, false)); //need to test on/off and length of on time
+    intakeOn.whenPressed(() -> m_shooter.intakeOn(ShooterConstants.kIntakePower, Constants.currentIntakeState)); //need to test on/off and length of on time
     final  JoystickButton intakeReverse = new JoystickButton(m_xboxController, Constants.kIntakeReverseButton);
-    intakeReverse.whenPressed(() -> m_shooter.intakeOn(-ShooterConstants.kIntakePower, false));
+    intakeReverse.whenPressed(() -> m_shooter.intakeOn(-ShooterConstants.kIntakePower, Constants.currentIntakeState));
 
 
 /*
@@ -148,12 +149,6 @@ public class RobotContainer {
     slowDown.whenPressed(() -> m_robotDrive.halfPower());
    */ 
 
-    /* intake
-    final JoystickButton intakeButton = new JoystickButton(m_xboxController, Constants.kIntakeButton);
-    final JoystickButton intakeReverse = new JoystickButton(m_xboxController, Constants.kIntakeReverseButton);
-    intakeButton.whenPressed(() -> m_intake.intakeOn(IntakeConstants.kIntakePower, Constants.currentIntakeState));
-    intakeReverse.whenPressed(() -> m_intake.intakeOn(-IntakeConstants.kIntakePower, Constants.currentIntakeState));
-*/
     /* conveyor
     final JoystickButton conveyorButton = new JoystickButton(m_xboxController, Constants.kConveyorPulseButton);
     conveyorButton.whileHeld(new RunCommand(() -> m_intake.upperAndLowerOn(IntakeConstants.kConveyorPulsePower))
