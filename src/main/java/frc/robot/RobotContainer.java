@@ -23,10 +23,10 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 
@@ -43,15 +43,13 @@ public class RobotContainer {
   // drn -- drive & intake & arm subsystem declarations
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
-  private final ShooterSubsystem m_shooterMotor = new ShooterSubsystem();
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
 
 
   /*
    * removed for CAN issue private final IntakeSubsystem m_intake = new
    * IntakeSubsystem();
-   * 
-   * private final ArmPIDSubsystem m_armPID = new ArmPIDSubsystem();
    */
   // drn --- declaring an instance of the XBox controller
   private final XboxController m_xboxController = new XboxController(OIConstants.kDriverControllerPort);
@@ -78,16 +76,14 @@ public class RobotContainer {
   private final Command m_simpleDriveReverse = new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
       m_robotDrive).withTimeout(AutoConstants.kTimeOut);
 
-  private final Command m_simpleShoot = new RunCommand(() -> m_shooterMotor.intakeOn(ShooterConstants.kIntakePower, false)); //needs to be false
+  private final Command m_simpleShoot = new RunCommand(() -> m_shooter.intakeOn(ShooterConstants.kIntakePower, false)); //needs to be false
   
-  private final Command m_autoReverse = new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
-  m_robotDrive).withTimeout(AutoConstants.kTimeOut);
-
   private final SequentialCommandGroup m_autoDunk = new SequentialCommandGroup(
-   new RunCommand(() -> m_shooterMotor.intakeOn(0.3, false)).withTimeout(2.0),
-   new RunCommand(() -> m_shooterMotor.intakeOn(0.0, false)),
+   new RunCommand(() -> m_shooter.intakeOn(0.3, false)).withTimeout(2.0),
+   new RunCommand(() -> m_shooter.intakeOn(0.0, false)),
   //motors dont turn
-   new RunCommand(() -> m_robotDrive.arcadeDrive(AutoConstants.kTimeOut, 0.0)).withTimeout(5.0)
+   new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kTimeOut, 0.0), 
+    () -> m_robotDrive.arcadeDrive(0.0, 0.0)).withTimeout(5.0)
   );
 
 
@@ -110,6 +106,7 @@ public class RobotContainer {
     // drive command to split-stick arcade drive
     // split stick is left and right sticks on the XBox
     
+
     m_robotDrive
         .setDefaultCommand(new RunCommand(() -> m_robotDrive.arcadeDrive(-m_xboxController.getLeftX(),
             -m_xboxController.getRightY()), m_robotDrive));
@@ -136,6 +133,15 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // arm
+    final JoystickButton armUp = new JoystickButton(m_xboxController, Constants.kArmUp);
+    armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower));
+
+/*
+    final JoystickButton slowDown = new JoystickButton(m_xboxController, Constants.kSlowDown);
+    slowDown.whenPressed(() -> m_robotDrive.halfPower());
+   */ 
+
     /* intake
     final JoystickButton intakeButton = new JoystickButton(m_xboxController, Constants.kIntakeButton);
     final JoystickButton intakeReverse = new JoystickButton(m_xboxController, Constants.kIntakeReverseButton);

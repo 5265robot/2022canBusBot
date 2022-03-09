@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
@@ -29,23 +29,23 @@ public final class Constants {
 	public static boolean powerState = false;
 	
     // XBox mappings
-    /*  kBumperLeft(5)  --> half speed driving
-        kBumperRight(6) --> extend elbow
+    /*  kBumperLeft(5)  --> 
+        kBumperRight(6) --> arm up
         kStickLeft(9)   --> conveyor empty
         kStickRight(10) --> 
         kA(1)           --> intake
-        kB(2)           --> conveyor one ball pulse
+        kB(2)           --> 
         kX(3)           --> disable climbarm
         kY(4)           --> switch camera
         kBack(7)        --> intake reverse
-        kStart(8)       --> 
+        kStart(8)       --> half speed drive
     */
     public static int kIntakeButton = XboxController.Button.kA.value;   
     public static int kConveyorPulseButton = XboxController.Button.kB.value;   
     public static int kClimbOffButton = XboxController.Button.kX.value;
     public static int kSwitchCameraButton = XboxController.Button.kY.value;   
-    public static int kSlowDown = XboxController.Button.kLeftBumper.value;
-    public static int kElbowExtend = XboxController.Button.kRightBumper.value;
+    public static int kSlowDown = XboxController.Button.kStart.value;
+    public static int kArmUp = XboxController.Button.kRightBumper.value;
 	public static int kIntakeReverseButton = XboxController.Button.kBack.value;
     public static int kConveyorEmptyButton = XboxController.Button.kLeftStick.value;
     
@@ -79,7 +79,8 @@ public final class Constants {
         public static final int kArmMotorPWM = 2;
         public static final int kUpperMotorPWM = 4;
         public static final int kShooterMotorPWM = 1;
-        public static final double kIntakePower = 0.4; // 0.3
+        public static final double kArmPower = 0.4; // 0.3
+        public static final double kIntakePower = 0.4;
         public static final double kConveyorPulsePower = -0.4;
 		public static final double kConveyorFullPower = -0.6; //-0.6
 		public static final double kConveyorFiveBallEmpty = 2.0;

@@ -40,10 +40,14 @@ public class ShooterSubsystem extends SubsystemBase {
   public void upperOn(double power){
     m_upperSpark.set(power);
   }
-  // powers the lower conveyor belt
+  // raises lift
   public void armUp(double power){
     m_arm.set(power);
   }
+
+
+  /*
+
   // powers both conveyor belts,
   // giving the upper belt a bit more power
   public void upperAndLowerOn(double power){
@@ -56,6 +60,8 @@ public class ShooterSubsystem extends SubsystemBase {
     upperOn(0.0);
     armUp(0.0);
   }
+
+  */
 
   @Override
   public void periodic() {
