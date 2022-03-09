@@ -23,7 +23,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -76,10 +75,10 @@ public class RobotContainer {
   private final Command m_simpleDriveReverse = new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), () -> m_robotDrive.arcadeDrive(0.0, 0.0),
       m_robotDrive).withTimeout(AutoConstants.kTimeOut);
 
-  private final Command m_simpleShoot = new RunCommand(() -> m_shooter.intakeOn(ShooterConstants.kIntakePower, false)); //needs to be false
+  private final Command m_simpleShoot = new RunCommand(() -> m_shooter.intakeOn(-ShooterConstants.kIntakePower, false)); //needs to be false
   
   private final SequentialCommandGroup m_autoDunk = new SequentialCommandGroup(
-   new RunCommand(() -> m_shooter.intakeOn(0.3, false)).withTimeout(2.0),
+   new RunCommand(() -> m_shooter.intakeOn(-0.3, false)).withTimeout(2.0),
    new RunCommand(() -> m_shooter.intakeOn(0.0, false)),
   //motors dont turn
    new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kTimeOut, 0.0), 
@@ -136,6 +135,13 @@ public class RobotContainer {
     // arm
     final JoystickButton armUp = new JoystickButton(m_xboxController, Constants.kArmUp);
     armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower));
+
+    //intake/outake
+    final JoystickButton intakeOn = new JoystickButton(m_xboxController, Constants.kIntakeButton);
+    intakeOn.whenPressed(() -> m_shooter.intakeOn(ShooterConstants.kIntakePower, false)); //need to test on/off and length of on time
+    final  JoystickButton intakeReverse = new JoystickButton(m_xboxController, Constants.kIntakeReverseButton);
+    intakeReverse.whenPressed(() -> m_shooter.intakeOn(-ShooterConstants.kIntakePower, false));
+
 
 /*
     final JoystickButton slowDown = new JoystickButton(m_xboxController, Constants.kSlowDown);
