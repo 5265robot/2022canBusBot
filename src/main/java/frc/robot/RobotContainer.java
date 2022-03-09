@@ -9,6 +9,9 @@ package frc.robot;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
+
+import java.lang.reflect.Executable;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -81,8 +84,7 @@ public class RobotContainer {
    new RunCommand(() -> m_shooter.intakeOn(-0.3, false)).withTimeout(2.0),
    new RunCommand(() -> m_shooter.intakeOn(0.0, false)),
   //motors dont turn
-   new StartEndCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kTimeOut, 0.0), 
-    () -> m_robotDrive.arcadeDrive(0.0, 0.0)).withTimeout(5.0)
+   new RunCommand (() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), m_robotDrive).withTimeout(4.0)
   );
 
 
@@ -100,7 +102,7 @@ public class RobotContainer {
     configureButtonBindings();
     // prepare the camera
     // removed for characterization
-    // cameraInit();
+    cameraInit();
 
     // drive command to split-stick arcade drive
     // split stick is left and right sticks on the XBox
@@ -135,9 +137,9 @@ public class RobotContainer {
 
     // arm
     final JoystickButton armUp = new JoystickButton(m_xboxController, Constants.kArmUp);
-    armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower, Constants.armExtended));
+    armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower, Constants.armUp));
     final JoystickButton armDown = new JoystickButton(m_xboxController, Constants.kArmDown);
-    armDown.whenPressed(() -> m_shooter.armUp(-ShooterConstants.kArmPower, Constants.armExtended));
+    armDown.whenPressed(() -> m_shooter.armUp(-ShooterConstants.kArmPower, Constants.armUp));
 
     // intake/outake
     final JoystickButton intakeOn = new JoystickButton(m_xboxController, Constants.kIntakeButton);
@@ -181,8 +183,8 @@ public class RobotContainer {
      * .withTimeout(IntakeConstants.kConveyorFiveBallEmpty) .andThen(new
      * RunCommand(() -> m_intake.upperAndLowerOff())));
      */
-
-    /* camera
+/*
+    //camera
     final JoystickButton switchCamera = new JoystickButton(m_xboxController, Constants.kSwitchCameraButton);
     switchCamera.whenPressed(() -> cameraSwitch());
 */
@@ -225,12 +227,9 @@ public class RobotContainer {
   // Starting and adjusting both cameras
   private void cameraInit() {
     camera01 = CameraServer.startAutomaticCapture(0);
-    camera02 = CameraServer.startAutomaticCapture(1);
     videoServer = CameraServer.getServer();
     camera01.setResolution(320, 240);
     camera01.setFPS(15);
-    camera02.setResolution(320, 240);
-    camera02.setFPS(15);
     videoServer.setSource(camera01);
   } // end cameraInit
 

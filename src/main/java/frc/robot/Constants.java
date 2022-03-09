@@ -24,9 +24,28 @@ public final class Constants {
     // on / off switches
     public static boolean currentIntakeState = false;
     public static boolean cameraState = false;
-    public static boolean armExtended = false;
+    public static boolean armUp = true;
     public static boolean winchState = false;
 	public static boolean powerState = false;
+
+/*
+
+// everybot constants
+    public static final double armHoldUp = 0.08;
+    public static final double armHoldDown = 0.13;
+    public static final double armTravel = 0.5;
+  
+    public static final double armTimeUp = 0.5;
+    public static final double armTimeDown = 0.35;
+  
+    //Varibles needed for the code
+    public static boolean burstMode = false;
+    public static double lastBurstTime = 0;
+  
+    public static double autoStart = 0;
+    public static boolean goForAuto = false;
+  
+    */
 	
     // XBox mappings
     /*  kBumperLeft(5)  --> arm down
@@ -77,10 +96,10 @@ public final class Constants {
 		public static final double kMaxSpeed = 0.6;
     }
     public final class ShooterConstants{
-        public static final int kArmMotorPWM = 2;
+        public static final int kArmMotor = 5;
         public static final int kUpperMotorPWM = 4;
         public static final int kShooterMotorPWM = 1;
-        public static final double kArmPower = 0.4; // 0.3
+        public static final double kArmPower = 0.5; 
         public static final double kIntakePower = 0.4;
         public static final double kConveyorPulsePower = -0.4;
 		public static final double kConveyorFullPower = -0.6; //-0.6
