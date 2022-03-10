@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.Dunks;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -45,6 +46,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+
 
   /*
    * removed for CAN issue private final IntakeSubsystem m_intake = new
@@ -77,12 +79,9 @@ public class RobotContainer {
 
   private final Command m_simpleShoot = new RunCommand(() -> m_shooter.intakeOn(-ShooterConstants.kIntakePower, false)); //needs to be false
   
-  private final SequentialCommandGroup m_autoDunk = new SequentialCommandGroup(
-   new RunCommand(() -> m_shooter.intakeOn(-0.3, false)).withTimeout(2.0),
-   new RunCommand(() -> m_shooter.intakeOn(0.0, false)),
-  //motors dont turn
-   new RunCommand (() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), m_robotDrive).withTimeout(4.0)
-  );
+  
+
+  
 /*
   private Command AutoDunk(DriveSubsystem drive, ShooterSubsystem intake) {
     addCommands(
@@ -119,7 +118,7 @@ public class RobotContainer {
     m_chooser.addOption("Forward Auto", m_simpleDriveForward);
     m_chooser.addOption("Reverse Auto", m_simpleDriveReverse);
     m_chooser.addOption("Shoot Auto", m_simpleShoot);
-    m_chooser.addOption("Auto Dunks", m_autoDunk);
+    m_chooser.addOption("Auto Dunks", new Dunks(m_robotDrive, m_shooter));
     m_chooser.setDefaultOption("Forward Auto", m_simpleDriveForward);
     sbConfig.add(m_chooser).withSize(3, 1).withPosition(0, 0);
 
@@ -140,7 +139,7 @@ public class RobotContainer {
 
     // arm
     final JoystickButton armUp = new JoystickButton(m_xboxController, Constants.kArmUp);
-    armUp.whileHeld(() -> m_shooter.armUp(ShooterConstants.kArmPower, Constants.armUp));
+    armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower, Constants.armUp));
     final JoystickButton armDown = new JoystickButton(m_xboxController, Constants.kArmDown);
     armDown.whileHeld(() -> m_shooter.armUp(-ShooterConstants.kArmPower, Constants.armUp));
 
@@ -148,7 +147,7 @@ public class RobotContainer {
     final JoystickButton intakeOn = new JoystickButton(m_xboxController, Constants.kIntakeButton);
     intakeOn.whenPressed(() -> m_shooter.intakeOn(ShooterConstants.kIntakePower, Constants.currentIntakeState)); //need to test on/off and length of on time
     final  JoystickButton intakeReverse = new JoystickButton(m_xboxController, Constants.kIntakeReverseButton);
-    intakeReverse.whenPressed(() -> m_shooter.intakeOn(-ShooterConstants.kIntakePower, Constants.currentIntakeState));
+    intakeReverse.whenPressed(() -> m_shooter.intakeOn(-ShooterConstants.kOutTakePower, Constants.currentIntakeState));
 
 
 /*
@@ -186,11 +185,11 @@ public class RobotContainer {
      * .withTimeout(IntakeConstants.kConveyorFiveBallEmpty) .andThen(new
      * RunCommand(() -> m_intake.upperAndLowerOff())));
      */
-/*
+
     //camera
     final JoystickButton switchCamera = new JoystickButton(m_xboxController, Constants.kSwitchCameraButton);
     switchCamera.whenPressed(() -> cameraSwitch());
-*/
+
     /* arm
     // D-Pad UP
     final POVButton climbArmUp = // raises arm via PID
@@ -227,7 +226,7 @@ public class RobotContainer {
 
   } // end configureButtonBindins
 
-  // Starting and adjusting both cameras
+  // Starting and adjusting camera
   private void cameraInit() {
     camera01 = CameraServer.startAutomaticCapture(0);
     videoServer = CameraServer.getServer();

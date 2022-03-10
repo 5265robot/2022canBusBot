@@ -98,9 +98,10 @@ public final class Constants {
     public final class ShooterConstants{
         public static final int kArmMotor05CanBusID = 15;
         public static final int kUpperMotorPWM = 4;
-        public static final int kShooterMotorPWM = 1;
-        public static final double kArmPower = 0.5; 
-        public static final double kIntakePower = 0.4;
+        public static final int kShooterMotorPWM = 0;
+        public static final double kArmPower = 0.3; 
+        public static final double kIntakePower = 0.2;
+        public static final double kOutTakePower = 0.7;
         public static final double kConveyorPulsePower = -0.4;
 		public static final double kConveyorFullPower = -0.6; //-0.6
 		public static final double kConveyorFiveBallEmpty = 2.0;
