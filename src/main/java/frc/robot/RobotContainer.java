@@ -140,9 +140,9 @@ public class RobotContainer {
 
     // arm
     final JoystickButton armUp = new JoystickButton(m_xboxController, Constants.kArmUp);
-    armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower, Constants.armUp));
+    armUp.whileHeld(() -> m_shooter.armUp(ShooterConstants.kArmPower, Constants.armUp));
     final JoystickButton armDown = new JoystickButton(m_xboxController, Constants.kArmDown);
-    armDown.whenPressed(() -> m_shooter.armUp(-ShooterConstants.kArmPower, Constants.armUp));
+    armDown.whileHeld(() -> m_shooter.armUp(-ShooterConstants.kArmPower, Constants.armUp));
 
     // intake/outake
     final JoystickButton intakeOn = new JoystickButton(m_xboxController, Constants.kIntakeButton);
