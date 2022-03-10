@@ -20,8 +20,8 @@ public class Dunks extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new InstantCommand(() -> m_robotDrive.arcadeDrive(0.0, 0.0), m_robotDrive),
       new InstantCommand(() -> m_shooter.intakeOn(-ShooterConstants.kOutTakePower, false), m_shooter).withTimeout(1.0),
-
       new InstantCommand(() -> m_robotDrive.arcadeDrive(-AutoConstants.kPower, 0.0), m_robotDrive).withTimeout(5.0)
     );
   }

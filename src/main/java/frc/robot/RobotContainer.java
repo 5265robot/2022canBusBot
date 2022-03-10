@@ -12,6 +12,8 @@ import edu.wpi.first.cscore.VideoSink;
 
 import java.lang.reflect.Executable;
 
+import javax.swing.text.Position;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -139,9 +141,15 @@ public class RobotContainer {
 
     // arm
     final JoystickButton armUp = new JoystickButton(m_xboxController, Constants.kArmUp);
-    armUp.whenPressed(() -> m_shooter.armUp(ShooterConstants.kArmPower, Constants.armUp));
+    armUp.whenPressed(() -> m_shooter.setPosition(-20, ShooterConstants.kArmPower));
     final JoystickButton armDown = new JoystickButton(m_xboxController, Constants.kArmDown);
     armDown.whileHeld(() -> m_shooter.armUp(-ShooterConstants.kArmPower, Constants.armUp));
+
+    //venom stuff
+    final JoystickButton positionGet = new JoystickButton(m_xboxController, Constants.kPrintPosition);
+    positionGet.whenPressed(() -> m_shooter.getPosition());
+    final JoystickButton positionReset = new JoystickButton(m_xboxController, Constants.kResetPostion);
+    positionReset.whenPressed(() -> m_shooter.resetPostion(0.0));
 
     // intake/outake
     final JoystickButton intakeOn = new JoystickButton(m_xboxController, Constants.kIntakeButton);

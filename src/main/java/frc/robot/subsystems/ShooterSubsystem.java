@@ -7,9 +7,13 @@
 
 package frc.robot.subsystems;
 
+import java.io.Console;
+
 import com.playingwithfusion.CANVenom;
+import com.playingwithfusion.CANVenom.ControlMode;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -37,6 +41,17 @@ public class ShooterSubsystem extends SubsystemBase {
     Constants.currentIntakeState = !state;
   }
 
+  public void setPosition(double pos, double power) {
+    m_arm.setCommand(ControlMode.PositionControl, pos);
+  }
+
+  public void getPosition() {
+    System.out.println(m_arm.getPosition());
+  }
+
+  public void resetPostion(double pos) {
+    m_arm.resetPosition();
+  }
   //intake on for certain amount of time
   public void intakePulse(double power){
     new RunCommand (() -> m_intakeSpark.set(power)).withTimeout(2.0);
