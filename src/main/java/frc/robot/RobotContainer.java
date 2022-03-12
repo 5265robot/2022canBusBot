@@ -9,11 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
-
-import java.lang.reflect.Executable;
-
-import javax.swing.text.Position;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -30,7 +25,6 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -49,14 +43,9 @@ public class RobotContainer {
 
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
-
-  /*
-   * removed for CAN issue private final IntakeSubsystem m_intake = new
-   * IntakeSubsystem();
-   */
   // drn --- declaring an instance of the XBox controller
   private final XboxController m_xboxController = new XboxController(OIConstants.kDriverControllerPort);
-  //private final Joystick m_thrustMaster = new Joystick(OIConstants.kTrustMasterPort);
+
 
   // drn -- A chooser for autonomous commands
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -66,7 +55,6 @@ public class RobotContainer {
 
   // Camera
   private UsbCamera camera01;
-  private UsbCamera camera02;
   private VideoSink videoServer;
 
   // drn -- while driving diagnostics
@@ -105,13 +93,10 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     // prepare the camera
-    // removed for characterization
     cameraInit();
 
     // drive command to split-stick arcade drive
     // split stick is left and right sticks on the XBox
-    
-
     m_robotDrive
         .setDefaultCommand(new RunCommand(() -> m_robotDrive.arcadeDrive(-m_xboxController.getLeftX(),
             -m_xboxController.getRightY()), m_robotDrive));
@@ -127,7 +112,7 @@ public class RobotContainer {
     // drn -- put power onto shuffleboard
     sbConfig.add("PDP voltage", pdp.getVoltage()).withSize(1, 1).withPosition(8, 0);
     // drn -- put camera on shuffleboard
-    // sbConfig.add(camera01).withSize(6, 5).withPosition(2, 0);
+    sbConfig.add(camera01).withSize(6, 5).withPosition(2, 0);
 
   } // end RobotContainer initialization methods
 
@@ -141,9 +126,15 @@ public class RobotContainer {
 
     // arm
     final JoystickButton armUp = new JoystickButton(m_xboxController, Constants.kArmUp);
-    armUp.whenPressed(() -> m_shooter.setPosition(-20, ShooterConstants.kArmPower));
+    //armUp.whenPressed(()-> m_shooter.setPosition(0.0));
+    armUp.whileHeld(() -> m_shooter.setPosition(-10.0));
     final JoystickButton armDown = new JoystickButton(m_xboxController, Constants.kArmDown);
-    armDown.whileHeld(() -> m_shooter.armUp(-ShooterConstants.kArmPower, Constants.armUp));
+    armDown.whileHeld(() -> m_shooter.setPosition(-18.0));
+    //armDown.whileHeld(new StartEndCommand (()-> m_shooter.armRaiseFull(-0.50),()->m_shooter.armRaiseFull(0.0),m_shooter).withTimeout(0.10));
+    final JoystickButton armPulseUp = new JoystickButton(m_xboxController, Constants.kArmPulseUp);
+    armPulseUp.whenPressed(new StartEndCommand (()-> m_shooter.armRaisePulse(0.1),()->m_shooter.armRaisePulse(0.0),m_shooter).withTimeout(0.05));
+    final JoystickButton armPulseDown = new JoystickButton(m_xboxController, Constants.kArmPulseDown);
+    armPulseDown.whileHeld(new StartEndCommand (()-> m_shooter.armRaisePulse(-1.0),()->m_shooter.armRaisePulse(0.0),m_shooter).withTimeout(0.05));
 
     //venom stuff
     final JoystickButton positionGet = new JoystickButton(m_xboxController, Constants.kPrintPosition);
@@ -157,80 +148,9 @@ public class RobotContainer {
     final  JoystickButton intakeReverse = new JoystickButton(m_xboxController, Constants.kIntakeReverseButton);
     intakeReverse.whenPressed(() -> m_shooter.intakeOn(-ShooterConstants.kOutTakePower, Constants.currentIntakeState));
 
-
-/*
-    /* conveyor
-    final JoystickButton conveyorButton = new JoystickButton(m_xboxController, Constants.kConveyorPulseButton);
-    conveyorButton.whileHeld(new RunCommand(() -> m_intake.upperAndLowerOn(IntakeConstants.kConveyorPulsePower))
-        .withTimeout(IntakeConstants.kConveyorOneBallPulse).andThen(new RunCommand(() -> m_intake.upperAndLowerOff())));
-
-    final JoystickButton conveyorFiveBallEmpty = new JoystickButton(m_xboxController, Constants.kConveyorEmptyButton);
-    conveyorFiveBallEmpty.whenPressed(() -> m_intake.upperAndLowerOn(IntakeConstants.kConveyorFullPower))
-        .whenReleased(() -> m_intake.upperAndLowerOff());
-
-    final JoystickButton conveyorThrustButton = new JoystickButton(m_thrustMaster, Constants.kThrustPulseButton);
-    conveyorThrustButton.whileHeld(new RunCommand(() -> m_intake.upperAndLowerOn(IntakeConstants.kConveyorPulsePower))
-        .withTimeout(IntakeConstants.kConveyorOneBallPulse).andThen(new RunCommand(() -> m_intake.upperAndLowerOff())));
-*/
-    /*
-     * final (new StartEndCommand(() ->
-     * m_intake.upperAndLowerOn(IntakeConstants.kConveyorFullPower))
-     * .withTimeout(IntakeConstants.kConveyorFiveBallEmpty) ->
-     * m_intake.upperAndLowerOff());
-     * 
-     * this button times out when held, runs constantly when tapped
-     * testMotorButton.whenHeld(new RunCommand(() ->
-     * m_miscDrive.misc01Drive(MiscConstants.kmisc01Power)) .withTimeout(0.3)
-     * .andThen(new RunCommand(() -> m_miscDrive.misc01Drive(0.0))));
-     * 
-     * conveyorOneBallPulse.whenPressed(new RunCommand(() ->
-     * m_intake.upperAndLowerOn(IntakeConstants.kLowerPower))
-     * .withTimeout(IntakeConstants.kConveyorOneBallPulse) .andThen(new
-     * RunCommand(() -> m_intake.upperAndLowerOff())));
-     * 
-     * conveyorFiveBallEmpty.whenPressed(new RunCommand(() ->
-     * m_intake.upperAndLowerOn(IntakeConstants.kLowerPower))
-     * .withTimeout(IntakeConstants.kConveyorFiveBallEmpty) .andThen(new
-     * RunCommand(() -> m_intake.upperAndLowerOff())));
-     */
-
-    //camera
-    final JoystickButton switchCamera = new JoystickButton(m_xboxController, Constants.kSwitchCameraButton);
-    switchCamera.whenPressed(() -> cameraSwitch());
-
-    /* arm
-    // D-Pad UP
-    final POVButton climbArmUp = // raises arm via PID
-        new POVButton(m_xboxController, OIConstants.kClimbArmUp);
-    climbArmUp.whenPressed(new InstantCommand(m_armPID::enable, m_armPID));
-    // D-Pad RIGHT
-    final POVButton climbArmExtend = // extends elbow
-        new POVButton(m_xboxController, OIConstants.kClimbArmExtend);
-    climbArmExtend.whenPressed(() -> m_armPID.fireElbow(), m_armPID);
-    // release arm and webbing
-    final JoystickButton releaseArmAndWebbing = new JoystickButton(m_xboxController, Constants.kElbowExtend);
-    releaseArmAndWebbing.whenPressed(() -> m_armPID.firePinch());
-    // D-Pad DOWN
-    final POVButton winchOn = // toggle that turns the winch on
-        new POVButton(m_xboxController, OIConstants.kWinchOnToggle);
-    winchOn.whenPressed(() -> m_armPID.winchOn(ArmConstants.kWinchPower));
-    // D-Pad LEFT
-    final POVButton climbArmDown = // toggle that drops the arm
-        new POVButton(m_xboxController, OIConstants.kClimbArmDownToggle);
-    climbArmDown.whenPressed(new InstantCommand(m_armPID::armDown, m_armPID).withTimeout(0.5));
-    // kX button
-    final JoystickButton climbArmOff = // stops PID, resets
-        new JoystickButton(m_xboxController, Constants.kClimbOffButton);
-    climbArmOff.whenPressed(() -> m_armPID.testArmOff());
-*/
     // speed
     final JoystickButton slowDown = new JoystickButton(m_xboxController, Constants.kSlowDown);
     slowDown.whenPressed(() -> m_robotDrive.halfPower());
-
-    /*
-     * .whenPressed(() -> m_robotDrive.setMax(DriveConstants.kSlowMaxSpeed))
-     * .whenReleased(() -> m_robotDrive.setMax(DriveConstants.kMaxSpeed));
-     */
 
   } // end configureButtonBindins
 
@@ -243,6 +163,7 @@ public class RobotContainer {
     videoServer.setSource(camera01);
   } // end cameraInit
 
+  /*
   // toggle switch for changing cameras
   private void cameraSwitch() {
     if (Constants.cameraState) {
@@ -252,7 +173,7 @@ public class RobotContainer {
     }
     Constants.cameraState = !Constants.cameraState;
   } // end cameraSwitch
-
+*/
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

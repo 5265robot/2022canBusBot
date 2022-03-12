@@ -7,14 +7,10 @@
 
 package frc.robot.subsystems;
 
-import java.io.Console;
-
 import com.playingwithfusion.CANVenom;
+import com.playingwithfusion.CANVenom.BrakeCoastMode;
 import com.playingwithfusion.CANVenom.ControlMode;
-
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
@@ -27,10 +23,10 @@ public class ShooterSubsystem extends SubsystemBase {
   // here. Call these from Commands.
   private final Spark m_intakeSpark = new Spark(ShooterConstants.kShooterMotorPWM);
   private final CANVenom m_arm = new CANVenom(ShooterConstants.kArmMotor05CanBusID);
-  private final Spark m_upperSpark = new Spark(ShooterConstants.kUpperMotorPWM);
 
   public ShooterSubsystem() {
     // initialization methods here
+    m_arm.setBrakeCoastMode(BrakeCoastMode.Brake);
   }
 
   // on/off switch for the intake
@@ -40,56 +36,85 @@ public class ShooterSubsystem extends SubsystemBase {
     else m_intakeSpark.set(0.0);
     Constants.currentIntakeState = !state;
   }
-
-  public void setPosition(double pos, double power) {
+  // set arm position command
+  public void setPosition(double pos) {
     armTest();
     m_arm.setCommand(ControlMode.PositionControl, pos);
   }
-
+  // print out
   public void getPosition() {
     System.out.println(m_arm.getPosition());
+    System.out.println(m_arm.getMaxAcceleration());
+    System.out.println(m_arm.getMaxSpeed());
+    System.out.println(m_arm.getBrakeCoastMode());
   }
-
+  // reset arm encoder position to 0.0
   public void resetPostion(double pos) {
     m_arm.resetPosition();
   }
-  //intake on for certain amount of time
-  public void intakePulse(double power){
-    new RunCommand (() -> m_intakeSpark.set(power)).withTimeout(2.0);
+ 
+  // powers arm full
+  public void armRaiseFull(double power){
+    m_arm.set(testFullArmPower(power));
+    m_arm.setBrakeCoastMode(BrakeCoastMode.Brake);
   }
-
-  // powers the upper conveyor belt
-  public void upperOn(double power){
-    m_upperSpark.set(power);
-  }
-  // raises lift
-  public void armUp(double power, boolean state){ //may delete state
-    m_arm.set(power);
+  // power arm pulse
+  public void armRaisePulse(double power){
+    m_arm.set(testPulseArmPower(power));
+    m_arm.setBrakeCoastMode(BrakeCoastMode.Brake);
   }
 
   // testing
   public void armTest(){
-    m_arm.setMaxSpeed(0.3);
-    m_arm.setMaxAcceleration(0.0);
-
+    //m_arm.
+    //m_arm.setSafetyEnabled(false);
+    m_arm.setPID(1.2, 0,0, 0.184, 0.5); //(1.5, 0,0, 0.184, 0)
+    //m_arm.setMaxSpeed(0.0);
+    //m_arm.setMaxAcceleration(20000.0);
+    m_arm.clearMotionProfilePoints();    
   }
+  //power lift safety (full)
+  public double testFullArmPower(double power){
 
-  /*
+      if(power == 0.0){
+        return (0.0);
+      }
+      if((power > 0.0) && (m_arm.getPosition() < -19)){
+        return (power);
+      }
+      if((power < 0.0) && (m_arm.getPosition() > -1)){
+        return (power);
+      }
 
-  // powers both conveyor belts,
-  // giving the upper belt a bit more power
-  public void upperAndLowerOn(double power){
-    // can we put a timeout here
-    upperOn(power*ShooterConstants.kUpperLowerRatio);
-    armUp(power);
+      return 0.0;
   }
-  // turns off the conveyor belts
-  public void upperAndLowerOff(){
-    upperOn(0.0);
-    armUp(0.0);
-  }
+  // position limiter and safety
+  public double testArmPosition(double pos){
+    if(m_arm.getPosition() < -19){
+      return (pos);
+    }
+    if(m_arm.getPosition() > -1){
+      return (pos);
+    }
 
-  */
+    return pos;
+  }
+  //power lift safety (pulse)
+  public double testPulseArmPower(double power){
+
+    if(power == 0.0){
+      return (0.0);
+    }
+    if((power > 0.0) && (m_arm.getPosition() < 0)){
+      return (power);
+    }
+    if((power < 0.0) && (m_arm.getPosition() > -20)){
+      return (power);
+    }
+
+    return 0.0;
+}
+
 
   @Override
   public void periodic() {

@@ -62,27 +62,19 @@ public final class Constants {
     public static int kIntakeButton = XboxController.Button.kA.value;   
     public static int kIntakeReverseButton = XboxController.Button.kB.value;   
     public static int kClimbOffButton = XboxController.Button.kX.value;
-    public static int kSwitchCameraButton = XboxController.Button.kY.value;   
-    public static int kSlowDown = XboxController.Button.kStart.value;
+    public static int kSlowDown = XboxController.Button.kY.value;   
+    public static int kArmPulseDown = XboxController.Button.kStart.value;
     public static int kArmUp = XboxController.Button.kRightBumper.value;
     public static int kArmDown = XboxController.Button.kLeftBumper.value;
-	public static int kConveyerPulseButton = XboxController.Button.kBack.value;
+	public static int kArmPulseUp = XboxController.Button.kBack.value;
     public static int kPrintPosition = XboxController.Button.kLeftStick.value;
     public static int kResetPostion = XboxController.Button.kRightStick.value;
     
-    // thrustmaster buttons
-	public static int kThrustPulseButton = 9;
 
     
     public final class OIConstants{
         public static final int kDriverControllerPort = 0;
-        public static final int kTrustMasterPort = 1;
-        // d-pad positions
-        public static final int kClimbArmUp = 0;
-        public static final int kClimbArmExtend = 90;
-        public static final int kWinchOnToggle = 180;
-        public static final int kClimbArmDownToggle = 270;
-		
+  
     }
     public final class AutoConstants {
         public static final double kTimeOut = 1.0;
@@ -98,7 +90,6 @@ public final class Constants {
     }
     public final class ShooterConstants{
         public static final int kArmMotor05CanBusID = 15;
-        public static final int kUpperMotorPWM = 4;
         public static final int kShooterMotorPWM = 0;
         public static final double kArmPower = 0.5; 
         public static final double kIntakePower = 0.25;
