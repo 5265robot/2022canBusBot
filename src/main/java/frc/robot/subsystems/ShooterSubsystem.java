@@ -42,6 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double pos, double power) {
+    armTest();
     m_arm.setCommand(ControlMode.PositionControl, pos);
   }
 
@@ -66,6 +67,12 @@ public class ShooterSubsystem extends SubsystemBase {
     m_arm.set(power);
   }
 
+  // testing
+  public void armTest(){
+    m_arm.setMaxSpeed(0.3);
+    m_arm.setMaxAcceleration(0.0);
+
+  }
 
   /*
 

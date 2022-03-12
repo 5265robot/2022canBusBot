@@ -100,7 +100,7 @@ public final class Constants {
         public static final int kArmMotor05CanBusID = 15;
         public static final int kUpperMotorPWM = 4;
         public static final int kShooterMotorPWM = 0;
-        public static final double kArmPower = 0.3; 
+        public static final double kArmPower = 0.5; 
         public static final double kIntakePower = 0.25;
         public static final double kOutTakePower = 0.7;
         public static final double kConveyorPulsePower = -0.4;
